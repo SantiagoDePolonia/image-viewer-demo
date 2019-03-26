@@ -1,28 +1,44 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { PureComponent } from 'react';
+import { connect } from 'react-redux'
+import { library } from '@fortawesome/fontawesome-svg-core'
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTh, faTrash } from '@fortawesome/free-solid-svg-icons'
 
-class App extends Component {
+import MasterView from './components/MasterView';
+import DetailsView from './components/DetailsView';
+
+// add awesome icons
+library.add(faTh);
+library.add(faTrash);
+
+const SwitchView = ({viewType}) => {
+  switch(viewType) {
+    case 'details':
+      return <DetailsView />;
+    case 'master':
+      return <MasterView />;
+    default:
+  }
+}
+
+class App extends PureComponent {
   render() {
+    const {viewType, images} = this.props;
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
+      <SwitchView viewType={viewType} images={images} />
     );
   }
 }
 
-export default App;
+const mapStateToProps = (state /*, ownProps*/) => {
+  return {
+    viewType: state.viewType,
+  }
+};
+
+const mapDispatchToProps = {  };
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App);
